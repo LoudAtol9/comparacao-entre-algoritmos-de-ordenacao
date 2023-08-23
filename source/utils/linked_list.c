@@ -86,3 +86,39 @@ struct cel* find_max(struct cel* head)
     return max;
 }
 
+
+struct cel* make_copy(struct cel* old)
+{
+    struct cel* i = NULL;
+    struct cel* new = NULL;
+    
+    for (i = 0; i != NULL; i = i->next)
+        add_elem(&new, i->num);
+    
+    return new;
+}
+
+
+int aux_copy_elems(struct cel* a, struct cel* b)
+{
+    if (a == NULL && b == NULL)
+        return 0;
+    else if(a == NULL || b == NULL)
+        return 1;
+
+    if (aux_copy_elems(a->next, b->next))
+    {
+        b->num = a->num;
+        return 1;
+    }
+
+    return 0;
+}
+
+/*
+ * A --> B
+ */
+int copy_elems(struct cel* a, struct cel* b)
+{
+    return aux_copy_elems(a, b);
+}

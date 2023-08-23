@@ -15,5 +15,7 @@
 int* create_rand_array(int* len);
 
 
+struct cel* create_rand_list(int len);
+
 
 #endif /*RANDOM_ARRAYS_GEN_H*/

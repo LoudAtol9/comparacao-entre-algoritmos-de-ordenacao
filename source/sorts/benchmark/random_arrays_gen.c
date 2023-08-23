@@ -32,7 +32,7 @@ int* create_rand_array(int* len)
  * 
  * Caso o tamanho seja zero, ele vai sortear a qnt de elementos
  */
-struct cel* creat_rand_list(int len)
+struct cel* create_rand_list(int len)
 {
     int i;
     struct cel* list = NULL;

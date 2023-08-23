@@ -42,4 +42,17 @@ struct cel* find_min(struct cel* head);
  */
 struct cel* find_max(struct cel* head);
 
+/*
+ * Retorna uma copia da lista
+ */
+struct cel* make_copy(struct cel* old);
+
+/*
+ * Copia os elementos da lista a pra lista b
+ * Caso seja de tamanhos diferente ele retornara 0
+ * Caso de certo ele retornara 1
+ * A --> B
+ */
+int copy_elems(struct cel* a, struct cel* b);
+
 #endif /*LINKED_LIST_H*/
