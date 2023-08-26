@@ -55,7 +55,7 @@ def main(arg):
         intervals = []
 
         for x in range(int(arg[1])):
-            lists.append(run_file("benchmark.exe", arg[1], x * 10, int(arg[2])))
+            lists.append(run_file("/source/sorts/benchmark/benchmark.exe", arg[1], x * 10, int(arg[2])))
             intervals.append(x)
 
         insertion = []
