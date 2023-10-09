@@ -7,13 +7,13 @@ from scipy.linalg import lstsq
 import matplotlib.pyplot as plt
 
 
-def graph(x_axis, y_axis, title, sort_name):
+def graph(x_axis, y_axis, p, title):
     plt.plot(x_axis, y_axis, 'o', label='data')
 
-    xx = np.linspace(0, 9, 101)
-    yy = x_axis[0] + x_axis[1]*xx**2
+    xx = np.linspace(0, 170000, 101)
+    yy = p[0] + p[1]*xx**2
 
-    plt.plot(xx, yy, label=sort_name)
+    plt.plot(xx, yy, label="minimos quadrados por $y = a + bx^2$")
 
     plt.title(title)
     plt.xlabel("Tamanho da lista (n elem)")
@@ -24,6 +24,8 @@ def graph(x_axis, y_axis, title, sort_name):
     plt.grid(alpha=0.25)
 
     plt.savefig(title + ".pdf")
+
+    plt.close()
 
     #plt.show()
 
@@ -67,12 +69,12 @@ def run_file(my_args):
     return int(tempo[0])
 
 
-def not_main():
+if __name__ == '__main__':
 
     step = 1000
-    end = 10000
+    end = 170000
 
-    path = "/build/"
+    path = "build/"
     files = ["bubble", "heap", "insertion", "merge", "quick", "selection"]
     times = [[], [], [], [], [], []]
     posfix = "_sort.exe"
@@ -80,8 +82,7 @@ def not_main():
     intervals = []
     random_num = []
 
-    x = np.array()
-    y = np.array()
+    y = []
 
     for size in range(step, end, step):
         intervals.append(size)
@@ -91,47 +92,49 @@ def not_main():
             times[j].append(run_file(random_num))
         random_num.clear()
             
-    for i in range(0,6):
-        graph(least_squares(times[i], intervals), intervals, files[i], files[i])
-
-
-if __name__ == '__main__':
-
-    step = 10000
-    end = 170000
-
-    filename = "build/bubble_sort.exe"
-    random_num = []
-    times = []
-    intervals = []
-
-    for size in range(step, end, step):
-        random_num = make_random_num(size)
-        intervals.append(size)
-        random_num.insert(0, filename)
-        times.append((run_file(random_num)))
-    
-    y = np.array(times)
     x = np.array(intervals)
-    M = x[:, np.newaxis]**[0,2]
-    p, res, rnk, s = lstsq(M, y)
 
-    plt.plot(x, y, 'o', label='data')
+    for i in range(0,6):
+        y.append(np.array(times[i]))
+        M = x[:, np.newaxis]**[0,2]
+        p, res, rnk, s = lstsq(M, y[i])
+        graph(x, y[i], p, files[i])
 
-    xx = np.linspace(0, 170000, 101)
-    yy = p[0] + p[1]*xx**2
-
-    plt.plot(xx, yy, label="minimos quadrados por $y = a + bx^2$")
-
-    plt.title("bubble_sort")
-    plt.xlabel("Tamanho da lista (n elem)")
-    plt.ylabel("Tempo em segundos (s)")
-
-    plt.legend(framealpha=1, shadow=True)
-
-    plt.grid(alpha=0.25)
-
-    plt.savefig("bubble_sort" + ".pdf")
-
-    stop = 1
+#    step = 10000
+#    end = 170000
+#
+#    filename = "build/bubble_sort.exe"
+#    random_num = []
+#    times = []
+#    intervals = []
+#
+#    for size in range(step, end, step):
+#        random_num = make_random_num(size)
+#        intervals.append(size)
+#        random_num.insert(0, filename)
+#        times.append((run_file(random_num)))
+#    
+#    y = np.array(times)
+#    x = np.array(intervals)
+#    M = x[:, np.newaxis]**[0,2]
+#    p, res, rnk, s = lstsq(M, y)
+#
+#    plt.plot(x, y, 'o', label='data')
+#
+#    xx = np.linspace(0, 170000, 101)
+#    yy = p[0] + p[1]*xx**2
+#
+#    plt.plot(xx, yy, label="minimos quadrados por $y = a + bx^2$")
+#
+#    plt.title("bubble_sort")
+#    plt.xlabel("Tamanho da lista (n elem)")
+#    plt.ylabel("Tempo em segundos (s)")
+#
+#    plt.legend(framealpha=1, shadow=True)
+#
+#    plt.grid(alpha=0.25)
+#
+#    plt.savefig("bubble_sort" + ".pdf")
+#
+#    stop = 1
     
