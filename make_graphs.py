@@ -111,21 +111,21 @@ if __name__ == '__main__':
         random_num.insert(0, filename)
         times.append((run_file(random_num)))
     
-    x = np.array(times)
-    y = np.array(intervals)
+    y = np.array(times)
+    x = np.array(intervals)
     M = x[:, np.newaxis]**[0,2]
     p, res, rnk, s = lstsq(M, y)
 
     plt.plot(x, y, 'o', label='data')
 
-    xx = np.linspace(0, 400000, 101)
+    xx = np.linspace(0, 170000, 101)
     yy = p[0] + p[1]*xx**2
 
     plt.plot(xx, yy, label="minimos quadrados por $y = a + bx^2$")
 
     plt.title("bubble_sort")
-    plt.ylabel("Tamanho da lista (n elem)")
-    plt.xlabel("Tempo em segundos (s)")
+    plt.xlabel("Tamanho da lista (n elem)")
+    plt.ylabel("Tempo em segundos (s)")
 
     plt.legend(framealpha=1, shadow=True)
 
