@@ -1,6 +1,6 @@
-import os
-import sys
 import subprocess
+
+import random
 
 import numpy as np
 from scipy.linalg import lstsq
@@ -28,6 +28,30 @@ def graph(x_axis, y_axis, title, sort_name):
     #plt.show()
 
 
+def make_random_num(size, mode=4):
+    arr = []
+    # Gauss
+    if mode == 0 : 
+        for i in range(size):
+            arr.append(random.gauss())
+    # Gamma
+    elif mode == 1 :
+        for i in range(size):
+            arr.append(random.gammavariate())
+    # Beta
+    elif mode == 2 :
+        for i in range(size):
+            arr.append(random.betavariate())
+    # Expo
+    elif mode == 3  :
+        for i in range(size):
+            arr.append(int(random.expovariate()))
+    # Uniform
+    elif mode == 4  :
+        for i in range(size):
+            arr.append(str(int(random.uniform(0, 1000))))
+    return arr
+
 
 def least_squares(x_axis, y_axis):
     M = x_axis[:, np.newaxis]**[0,2]
@@ -36,47 +60,78 @@ def least_squares(x_axis, y_axis):
     return p
 
 
-def run_file(program, mode, length, sample):
-    output = []
-
-    teste = subprocess.run([program, mode, str(length), str(sample)], stdout=subprocess.PIPE)
+def run_file(my_args):
+    teste = subprocess.run(args=my_args, stdout=subprocess.PIPE)
     tempo = teste.stdout.splitlines()
 
-    output.append(tempo)
-
-    return output
+    return int(tempo[0])
 
 
-def main(arg):
+def not_main():
 
-    if (int(arg[2]) > 0 and int(arg[3]) > 0):
+    step = 1000
+    end = 10000
 
-        lists = []
-        intervals = []
+    path = "/build/"
+    files = ["bubble", "heap", "insertion", "merge", "quick", "selection"]
+    times = [[], [], [], [], [], []]
+    posfix = "_sort.exe"
 
-        for x in range(int(arg[1])):
-            lists.append(run_file("/source/sorts/benchmark/benchmark.exe", arg[1], x * 10, int(arg[2])))
-            intervals.append(x)
+    intervals = []
+    random_num = []
 
-        insertion = []
-        bubble = []
-        selection = []
-        merge = []
-        quick = []
+    x = np.array()
+    y = np.array()
 
-        for x in lists:
-            selection.append(x[0])
-            bubble.append(x[1])
-            insertion.append(x[2])
-            merge.append(x[3])
-            quick.append(x[4])
+    for size in range(step, end, step):
+        intervals.append(size)
+        random_num = make_random_num(size, 4)
+        for j in range(0,6):
+            random_num.insert(0, path + files[j] + posfix)
+            times[j].append(run_file(random_num))
+        random_num.clear()
+            
+    for i in range(0,6):
+        graph(least_squares(times[i], intervals), intervals, files[i], files[i])
 
-        graph(least_squares(selection, intervals), intervals, "Selection-Sort", "Selection")
-        graph(least_squares(bubble, intervals), intervals, "Bubble-Sort", "Bubble")
-        graph(least_squares(insertion, intervals), intervals, "Insertion-Sort", "Insertion")
-        graph(least_squares(merge, intervals), intervals, "Merge-Sort", "Merge")
-        graph(least_squares(quick, intervals), intervals, "Quick-Sort", "Quick")
 
-    else:
-        print("USAGE: mode(array_or_list) sample_size n_loops")
+if __name__ == '__main__':
+
+    step = 10000
+    end = 170000
+
+    filename = "build/bubble_sort.exe"
+    random_num = []
+    times = []
+    intervals = []
+
+    for size in range(step, end, step):
+        random_num = make_random_num(size)
+        intervals.append(size)
+        random_num.insert(0, filename)
+        times.append((run_file(random_num)))
+    
+    x = np.array(times)
+    y = np.array(intervals)
+    M = x[:, np.newaxis]**[0,2]
+    p, res, rnk, s = lstsq(M, y)
+
+    plt.plot(x, y, 'o', label='data')
+
+    xx = np.linspace(0, 400000, 101)
+    yy = p[0] + p[1]*xx**2
+
+    plt.plot(xx, yy, label="minimos quadrados por $y = a + bx^2$")
+
+    plt.title("bubble_sort")
+    plt.ylabel("Tamanho da lista (n elem)")
+    plt.xlabel("Tempo em segundos (s)")
+
+    plt.legend(framealpha=1, shadow=True)
+
+    plt.grid(alpha=0.25)
+
+    plt.savefig("bubble_sort" + ".pdf")
+
+    stop = 1
     

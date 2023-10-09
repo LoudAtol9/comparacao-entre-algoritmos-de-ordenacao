@@ -3,12 +3,11 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include "../utils/time_calc.h"
 #include "../utils/linked_list.h"
-#include "../sorts/benchmark/random_arrays_gen.h"
-#include "../sorts/test/asserts_for_sorting.h"
 
 
-void bubble_sort(int array[], int len);
+uint64_t bubble_sort(int array[], int len);
 
 void din_bubble_sort(struct cel** head);
 

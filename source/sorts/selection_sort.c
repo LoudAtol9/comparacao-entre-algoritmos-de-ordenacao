@@ -1,7 +1,13 @@
 #include "selection_sort.h"
 
-void selection_sort(int array[], int len)
+uint64_t selection_sort(int array[], int len)
 {
+    struct timeval start;
+    struct timeval stop;
+
+    gettimeofday(&start, NULL);
+
+    /*Começo da Ordenação*/
     int i;
     int y;
 
@@ -25,8 +31,15 @@ void selection_sort(int array[], int len)
             array[min] = buffer;
         } 
     }
+    /*Fim da Ordenação*/
+
+    gettimeofday(&stop, NULL);
+
+    return deltatime_to_uint64(start, stop);
+
 }
 
+/*
 void din_selection_sort(struct cel** head)
 {
     struct cel** i;
@@ -56,18 +69,22 @@ void din_selection_sort(struct cel** head)
         }
     }
 }
+*/
 
-/*
- * Ao executar o arquivo ele verifica se o algoritmo está ordenando
- */
-/*int main(int argc, char const *argv[])
+int main(int argc, char const *argv[])
 {
-    int len = 0;
-    int* array = create_rand_array(&len);
+    int i;
+    int len;
+    int* arr;
 
-    selection_sort(array, len);
+    if (argc < 2)
+        return 0;
 
-    array_is_ordered(array, len);
+    len = argc - 1;
+    arr = (int*) malloc(sizeof(int) * len);
     
-    return 0;
-}*/
+    for (i = 0; i < len; i++)
+        arr[i] = atoi(argv[i + 1]);
+
+    printf("%" PRIu64, selection_sort(arr, len));
+}

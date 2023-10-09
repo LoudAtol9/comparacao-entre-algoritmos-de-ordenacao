@@ -2,10 +2,9 @@
 #define SELECTION_SORT_H
 
 #include "../utils/linked_list.h"
-#include "../sorts/benchmark/random_arrays_gen.h"
-#include "../sorts/test/asserts_for_sorting.h"
+#include "../utils/time_calc.h"
 
-void selection_sort(int array[], int len);
+uint64_t selection_sort(int array[], int len);
 
 void din_selection_sort(struct cel** head);
 
