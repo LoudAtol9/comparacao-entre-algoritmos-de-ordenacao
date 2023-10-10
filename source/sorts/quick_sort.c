@@ -1,5 +1,6 @@
 #include "quick_sort.h"
 
+/*
 int particione_aleatoria(int array[], int p, int r) {
     int aleatorio = p + rand() % (r - p + 1);
     int pivo = array[aleatorio];
@@ -29,6 +30,38 @@ void quick_sort_rec(int array[], int p, int r) {
         quick_sort_rec(array, lugar + 1, r);
     }
 }
+*/
+
+void quick_sort_rec(int values[], int began, int end)
+{
+	int i, j, pivo, aux;
+	i = began;
+	j = end-1;
+	pivo = values[(began + end) / 2];
+	while(i <= j)
+	{
+		while(values[i] < pivo && i < end)
+		{
+			i++;
+		}
+		while(values[j] > pivo && j > began)
+		{
+			j--;
+		}
+		if(i <= j)
+		{
+			aux = values[i];
+			values[i] = values[j];
+			values[j] = aux;
+			i++;
+			j--;
+		}
+	}
+	if(j > began)
+		quick_sort_rec(values, began, j+1);
+	if(i < end)
+		quick_sort_rec(values, i, end);
+}
 
 uint64_t quick_sort(int array[], int p, int r)
 {
@@ -37,11 +70,15 @@ uint64_t quick_sort(int array[], int p, int r)
 
     gettimeofday(&start, NULL);
 
+    /*
     if (p < r) {
         int lugar = particione_aleatoria(array, p, r);
         quick_sort_rec(array, p, lugar - 1);
         quick_sort_rec(array, lugar + 1, r);
     }
+    */
+
+    quick_sort_rec(array, p, r);
 
     gettimeofday(&stop, NULL);
 
